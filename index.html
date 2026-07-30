@@ -544,6 +544,9 @@ function mapear(){
       const base = chave(original);
       contagem[base] = (contagem[base] || 0) + 1;
       el.dataset.ed = base + "-" + contagem[base];
+      // Guarda o texto de origem antes de aplicar qualquer versao salva,
+      // para que dê sempre para voltar atras.
+      el.dataset.orig = original;
       alvos.push(el);
     });
   });
@@ -612,6 +615,15 @@ function entrarEdicao(){
   salvar.type = "button";
   salvar.textContent = "Salvar alterações";
   salvar.addEventListener("click", salvarTudo);
+  const restaurar = document.createElement("button");
+  restaurar.className = "ebtn";
+  restaurar.type = "button";
+  restaurar.textContent = "Restaurar original";
+  restaurar.addEventListener("click", () => {
+    if (!confirm("Voltar TODO o texto da página para a versão original?\n\nIsso desfaz todas as revisões já salvas. Você ainda precisa clicar em Salvar para publicar.")) return;
+    alvos.forEach(el => { el.innerHTML = el.dataset.orig; });
+    aviso("Texto original restaurado — clique em Salvar para publicar");
+  });
   const cancelar = document.createElement("button");
   cancelar.className = "ebtn";
   cancelar.type = "button";
@@ -621,7 +633,7 @@ function entrarEdicao(){
     alvos.forEach(el => { el.innerHTML = el.dataset.antes; });
     sairEdicao();
   });
-  bar.append(salvar, cancelar);
+  bar.append(salvar, restaurar, cancelar);
 }
 
 function sairEdicao(){
