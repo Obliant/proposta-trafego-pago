@@ -151,6 +151,22 @@
 
   .footnote{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);line-height:1.6}
 
+  /* ---------- Modo de edicao ---------- */
+  .editbar{position:fixed;right:20px;bottom:20px;z-index:60;display:flex;gap:8px;align-items:center}
+  .ebtn{font-family:var(--font-body);font-size:13px;font-weight:600;padding:10px 16px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;box-shadow:0 4px 14px rgba(15,23,42,.12)}
+  .ebtn:hover{border-color:var(--accent)}
+  .ebtn.primary{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+  .ebtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .editflag{position:fixed;top:0;left:0;right:0;z-index:60;background:var(--accent);color:var(--paper);font-size:12.5px;font-weight:600;text-align:center;padding:8px 16px;display:none}
+  body.editing .editflag{display:block}
+  body.editing{padding-top:34px}
+  body.editing [data-ed]{outline:1px dashed rgba(116,128,41,.55);outline-offset:3px;border-radius:3px}
+  body.editing [data-ed]:hover{outline-color:var(--accent);background:rgba(188,216,72,.10)}
+  body.editing [data-ed]:focus{outline:2px solid var(--accent);background:rgba(188,216,72,.14)}
+  .etoast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(16px);background:var(--ink);color:var(--paper);font-size:13px;font-weight:600;padding:11px 20px;border-radius:10px;opacity:0;transition:.25s;z-index:70;pointer-events:none}
+  .etoast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media print{.editbar,.editflag,.etoast{display:none!important}}
+
   @media (max-width:760px){
     .hero h1{font-size:33px}
     .group{grid-template-columns:1fr}
@@ -169,6 +185,14 @@
 </style>
 </head>
 <body>
+
+<div class="editflag" id="editFlag">Modo de edição — clique em qualquer texto para alterar</div>
+
+<div class="editbar" id="editBar">
+  <button class="ebtn" id="btnEdit" type="button">✎ Editar texto</button>
+</div>
+
+<div class="etoast" id="eToast"></div>
 
 <div class="hero">
   <div class="hero-inner">
@@ -461,6 +485,194 @@
   [meta,ticket,taxa,cpl].forEach(function(el){ el.addEventListener('input',calc); });
   calc();
 })();
+</script>
+
+<script type="module">
+// ===========================================================================
+//  Modo de edicao — texto editavel na pagina, salvo no Supabase.
+//  Qualquer pessoa com o link LE o texto atualizado; so quem tem o PIN edita.
+// ===========================================================================
+const SUPABASE_URL  = "https://vzbpbpxuedhgdpchasfc.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6YnBicHh1ZWRoZ2RwY2hhc2ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM5MTIxOTUsImV4cCI6MjA5OTQ4ODE5NX0.Y4zYHFhi75lDnylusaqWbE8Fv0ZPB091H6mAtpIE0GA";
+const TABELA = "proposta_conteudo";
+const PIN = "obliant2026";
+
+// Blocos de texto que podem ser editados.
+const SELETORES = [
+  ".hero h1", ".hero .sub", ".hero-ask .v",
+  "h2", ".section-sub",
+  ".group-role", ".front-name", ".front-desc", ".front-ticket",
+  ".posq p", ".qualify p",
+  ".phase-card h3", ".phase-card p", ".phase-card li",
+  ".persona h3", ".persona p",
+  ".fstage h4", ".fstage p",
+  ".scen-name", ".scen-meta", ".scen-main", ".scen-row .v",
+  ".roi-note p", ".kpi-note", ".tickets td",
+  ".ask h3", ".ask p", ".footnote"
+];
+
+// A chave vem do proprio texto original, nao da posicao na pagina. Assim a
+// edicao sobrevive a mudancas de layout; e se o texto de origem mudar, a
+// edicao antiga e descartada de proposito.
+function chave(txt){
+  let h = 5381;
+  for (let i = 0; i < txt.length; i++) h = ((h << 5) + h + txt.charCodeAt(i)) | 0;
+  return (h >>> 0).toString(36);
+}
+
+const flag  = document.getElementById("editFlag");
+const bar   = document.getElementById("editBar");
+const toast = document.getElementById("eToast");
+let db = null, editando = false, alvos = [];
+
+function aviso(msg){
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2600);
+}
+
+function mapear(){
+  const vistos = new Set();
+  const contagem = {};
+  alvos = [];
+  SELETORES.forEach(sel => {
+    document.querySelectorAll(sel).forEach(el => {
+      if (vistos.has(el)) return;
+      vistos.add(el);
+      const original = el.innerHTML.trim();
+      if (!original) return;
+      const base = chave(original);
+      contagem[base] = (contagem[base] || 0) + 1;
+      el.dataset.ed = base + "-" + contagem[base];
+      alvos.push(el);
+    });
+  });
+}
+
+async function conectar(){
+  if (db) return db;
+  const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm");
+  db = createClient(SUPABASE_URL, SUPABASE_ANON);
+  return db;
+}
+
+async function carregar(){
+  try {
+    const cli = await conectar();
+    const { data, error } = await cli.from(TABELA).select("*");
+    if (error) throw error;
+    if (!data || !data.length) return;
+    const porId = {};
+    data.forEach(r => porId[r.id] = r);
+    let ultima = null;
+    alvos.forEach(el => {
+      const r = porId[el.dataset.ed];
+      if (r && r.html != null) {
+        el.innerHTML = r.html;
+        if (!ultima || (r.updated_at || "") > (ultima.updated_at || "")) ultima = r;
+      }
+    });
+    if (ultima && ultima.updated_by) {
+      const nota = document.querySelector(".footnote");
+      if (nota) {
+        const marca = document.createElement("div");
+        marca.style.cssText = "margin-top:8px;font-style:italic";
+        const quando = ultima.updated_at
+          ? new Date(ultima.updated_at).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })
+          : "";
+        marca.textContent = "Texto revisado por " + ultima.updated_by + (quando ? " em " + quando : "") + ".";
+        nota.appendChild(marca);
+      }
+    }
+  } catch (e) {
+    console.warn("Nao foi possivel carregar o texto salvo:", e);
+  }
+}
+
+function entrarEdicao(){
+  editando = true;
+  document.body.classList.add("editing");
+  alvos.forEach(el => {
+    el.dataset.antes = el.innerHTML;
+    el.setAttribute("contenteditable", "true");
+    el.setAttribute("spellcheck", "true");
+  });
+  bar.innerHTML = "";
+  const salvar = document.createElement("button");
+  salvar.className = "ebtn primary";
+  salvar.type = "button";
+  salvar.textContent = "Salvar alterações";
+  salvar.addEventListener("click", salvarTudo);
+  const cancelar = document.createElement("button");
+  cancelar.className = "ebtn";
+  cancelar.type = "button";
+  cancelar.textContent = "Cancelar";
+  cancelar.addEventListener("click", () => {
+    if (!confirm("Descartar as alterações desta sessão?")) return;
+    alvos.forEach(el => { el.innerHTML = el.dataset.antes; });
+    sairEdicao();
+  });
+  bar.append(salvar, cancelar);
+}
+
+function sairEdicao(){
+  editando = false;
+  document.body.classList.remove("editing");
+  alvos.forEach(el => el.removeAttribute("contenteditable"));
+  bar.innerHTML = "";
+  const b = document.createElement("button");
+  b.className = "ebtn";
+  b.type = "button";
+  b.id = "btnEdit";
+  b.textContent = "✎ Editar texto";
+  b.addEventListener("click", pedirPin);
+  bar.appendChild(b);
+}
+
+function pedirPin(){
+  const p = prompt("PIN para editar o texto desta proposta:");
+  if (p === null) return;
+  if (p !== PIN) { aviso("PIN incorreto"); return; }
+  let quem = localStorage.getItem("obliant_quem") || "";
+  if (!quem) {
+    quem = (prompt("Seu nome (fica registrado como quem revisou):") || "").trim();
+    if (quem) localStorage.setItem("obliant_quem", quem);
+  }
+  entrarEdicao();
+  aviso("Modo de edição ligado");
+}
+
+async function salvarTudo(){
+  const mudados = alvos.filter(el => el.innerHTML.trim() !== (el.dataset.antes || "").trim());
+  if (!mudados.length) { sairEdicao(); aviso("Nenhuma alteração para salvar"); return; }
+  const quem = localStorage.getItem("obliant_quem") || "squad";
+  const linhas = mudados.map(el => ({
+    id: el.dataset.ed,
+    html: el.innerHTML.trim(),
+    updated_by: quem,
+    updated_at: new Date().toISOString()
+  }));
+  try {
+    const cli = await conectar();
+    const { error } = await cli.from(TABELA).upsert(linhas);
+    if (error) throw error;
+    sairEdicao();
+    aviso(mudados.length === 1 ? "1 trecho salvo e publicado" : mudados.length + " trechos salvos e publicados");
+  } catch (e) {
+    console.error(e);
+    alert("Não consegui salvar: " + (e.message || e) + "\n\nSuas alterações continuam na tela. Tente salvar de novo antes de fechar a página.");
+  }
+}
+
+window.addEventListener("beforeunload", e => {
+  if (!editando) return;
+  const pendente = alvos.some(el => el.innerHTML.trim() !== (el.dataset.antes || "").trim());
+  if (pendente) { e.preventDefault(); e.returnValue = ""; }
+});
+
+mapear();
+document.getElementById("btnEdit").addEventListener("click", pedirPin);
+carregar();
 </script>
 </body>
 </html>
