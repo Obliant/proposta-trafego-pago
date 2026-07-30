@@ -586,6 +586,15 @@ async function carregar(){
     }
   } catch (e) {
     console.warn("Nao foi possivel carregar o texto salvo:", e);
+    // Sem isso a pagina mostraria o texto original em silencio, e quem
+    // editou pensaria que perdeu o trabalho. Melhor dizer o que houve.
+    const nota = document.querySelector(".footnote");
+    if (nota) {
+      const alerta = document.createElement("div");
+      alerta.style.cssText = "margin-top:10px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);font-style:normal";
+      alerta.textContent = "Não foi possível carregar a última revisão do texto — o banco pode estar hibernando (projetos gratuitos pausam após alguns dias sem uso). Esta página está mostrando a versão original. As edições salvas não foram perdidas: entre no Supabase, clique em Restore e recarregue.";
+      nota.appendChild(alerta);
+    }
   }
 }
 
