@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Omnichannel · Proposta de tráfego pago</title>
+<style>
+  :root{
+    --ink:#12181F; --paper:#F3F4EF; --panel:#FFFFFF; --panel-2:#F8F9F5;
+    --accent:#748029; --accent-bright:#BCD848; --line:#DEE1D6; --muted:#5B6472;
+    --hero-bg:#0C1119; --hero-text:#F3F4EF; --hero-line:rgba(243,244,239,.14); --hero-accent:#D6E878; --hero-muted:#9AA3AE;
+    --font-head:Georgia,'Iowan Old Style','Palatino Linotype',serif;
+    --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    --font-mono:ui-monospace,'SF Mono',Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#EDEFE7; --paper:#12161C; --panel:#191F27; --panel-2:#1E2530; --accent:#BCD848; --accent-bright:#D6E878; --line:#2B323C; --muted:#9AA3AE; }
+  }
+  :root[data-theme="dark"]{ --ink:#EDEFE7; --paper:#12161C; --panel:#191F27; --panel-2:#1E2530; --accent:#BCD848; --accent-bright:#D6E878; --line:#2B323C; --muted:#9AA3AE; }
+  :root[data-theme="light"]{ --ink:#12181F; --paper:#F3F4EF; --panel:#FFFFFF; --panel-2:#F8F9F5; --accent:#748029; --accent-bright:#BCD848; --line:#DEE1D6; --muted:#5B6472; }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);font-variant-numeric:tabular-nums}
+  h1,h2,h3{text-wrap:balance}
+
+  /* ---------- Hero ---------- */
+  .hero{background:var(--hero-bg);color:var(--hero-text);padding:64px 28px 72px;position:relative;overflow:hidden}
+  .hero:before{content:"";position:absolute;top:-120px;right:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(214,232,120,.16),transparent 70%)}
+  .hero-inner{max-width:820px;margin:0 auto;position:relative}
+  .hero .brand{display:flex;align-items:center;gap:12px;margin-bottom:40px}
+  .hero .mark{width:32px;height:32px;border-radius:8px;flex:0 0 auto}
+  .hero .brand-text strong{display:block;font-family:var(--font-head);font-size:17px;color:var(--hero-text)}
+  .hero .brand-text span{display:block;font-size:11.5px;color:var(--hero-muted);margin-top:1px}
+  .hero .eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--hero-accent);margin-bottom:16px}
+  .hero h1{font-family:var(--font-head);font-weight:400;font-size:44px;line-height:1.12;margin:0 0 20px;max-width:16ch;letter-spacing:-.01em}
+  .hero .sub{font-size:17px;line-height:1.65;color:var(--hero-muted);max-width:58ch;margin:0 0 32px}
+  .hero-ask{display:inline-flex;flex-direction:column;gap:6px;background:rgba(214,232,120,.08);border:1px solid var(--hero-line);border-radius:12px;padding:16px 22px;max-width:100%}
+  .hero-ask .k{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hero-muted)}
+  .hero-ask .v{font-family:var(--font-head);font-size:20px;font-weight:400;color:var(--hero-accent);line-height:1.3}
+
+  /* ---------- Body ---------- */
+  .doc{max-width:820px;margin:0 auto;padding:56px 28px 72px}
+  .section{margin-bottom:52px}
+  h2{font-family:var(--font-head);font-weight:400;font-size:23px;margin:0 0 6px;letter-spacing:-.005em}
+  .section-sub{font-size:13.5px;color:var(--muted);margin:0 0 22px;max-width:60ch;line-height:1.55}
+
+  /* ---------- Método (tira conceitual) ---------- */
+  .method{display:flex;align-items:stretch;gap:0;margin:0 0 22px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;flex-wrap:wrap}
+  .method-step{flex:1;min-width:150px;padding:0 16px}
+  .method-step + .method-step{border-left:1px solid var(--line)}
+  .method-step b{display:block;font-size:12.5px;font-weight:600}
+  .method-step span{display:block;font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .method-step.is-focus b{color:var(--accent)}
+
+  /* ---------- Mapa de soluções ---------- */
+  .groups{display:grid;grid-template-columns:1fr;gap:12px}
+  .group{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:grid;grid-template-columns:180px 1fr;gap:18px}
+  .group-tag{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;display:block}
+  .group-role{font-size:12px;color:var(--muted);line-height:1.5}
+  .fronts{display:flex;flex-direction:column;gap:9px}
+  .front{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;padding:9px 0;border-top:1px solid var(--line)}
+  .front:first-child{border-top:0;padding-top:0}
+  .front-name{font-size:14px;font-weight:600}
+  .front-desc{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.5}
+  .front-ticket{font-family:var(--font-mono);font-size:11px;color:var(--muted);white-space:nowrap;text-align:right}
+  .front-ticket em{font-style:normal;display:block;font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-top:2px}
+
+  /* ---------- Posicionamento ---------- */
+  .posrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .posq{background:var(--panel-2);border-left:3px solid var(--accent-bright);border-radius:0 10px 10px 0;padding:15px 17px}
+  .posq b{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;font-weight:700}
+  .posq p{margin:0;font-size:13.5px;line-height:1.55}
+  .qualify{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px 18px;display:flex;gap:14px;align-items:flex-start}
+  .qualify .qmark{font-family:var(--font-head);font-size:24px;color:var(--accent-bright);line-height:1;flex:0 0 auto}
+  .qualify p{margin:0;font-size:13.5px;line-height:1.6}
+  .qualify b{font-weight:600}
+
+  /* ---------- Mecanismo (funil) ---------- */
+  .funnel{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .fstage{padding:17px 15px;border-left:1px solid var(--line);background:var(--panel)}
+  .fstage:first-child{border-left:0}
+  .fstage .flabel{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+  .fstage h4{margin:0 0 6px;font-size:14px;font-weight:600}
+  .fstage p{margin:0;font-size:11.5px;line-height:1.5;color:var(--muted)}
+
+  .phases{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .phase-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+  .phase-card .ptag{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+  .phase-card h3{font-family:var(--font-head);font-weight:400;font-size:18px;margin:6px 0 8px}
+  .phase-card p{font-size:12.5px;color:var(--muted);line-height:1.55;margin:0 0 12px}
+  .phase-card ul{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+  .phase-card li{font-size:13px;font-weight:600;padding:8px 10px;background:var(--panel-2);border-radius:8px}
+  .phase-card.f2 li{color:var(--muted);font-weight:500}
+  .phase-status{display:inline-block;margin-top:14px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:4px 10px;border-radius:999px}
+  .phase-status.now{background:var(--accent-bright);color:#26300a}
+  .phase-status.next{background:var(--panel-2);border:1px solid var(--line);color:var(--muted)}
+
+  .personas{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .persona{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .persona .role-tag{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+  .persona h3{font-family:var(--font-head);font-weight:400;font-size:16.5px;margin:5px 0 10px}
+  .persona p{margin:0 0 6px;font-size:12.5px;line-height:1.5;color:var(--muted)}
+  .persona p b{color:var(--ink);font-weight:600}
+  .persona .channel{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--accent);margin-top:8px}
+
+  .scenarios{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .scen{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px 20px;position:relative}
+  .scen.reco{border:2px solid var(--accent);padding-top:20px}
+  .scen-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--paper);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:4px 12px;border-radius:999px;white-space:nowrap}
+  .scen-name{font-family:var(--font-head);font-size:17px;margin:0 0 2px}
+  .scen-meta{font-size:11px;color:var(--muted);margin-bottom:16px}
+  .scen-main{font-family:var(--font-mono);font-size:26px;font-weight:700;color:var(--accent);line-height:1}
+  .scen-main small{font-size:12px;font-weight:500;color:var(--muted);display:block;margin-top:4px}
+  .scen-rows{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:9px}
+  .scen-row{display:flex;justify-content:space-between;font-size:12.5px}
+  .scen-row .k{color:var(--muted)}
+  .scen-row .v{font-family:var(--font-mono);font-weight:600}
+
+  .roi-note{margin-top:16px;background:var(--panel-2);border-left:3px solid var(--accent-bright);border-radius:0 10px 10px 0;padding:14px 18px}
+  .roi-note p{margin:0;font-size:13px;line-height:1.6;color:var(--ink)}
+  .roi-note b{font-weight:600}
+
+  .tickets{width:100%;border-collapse:collapse;margin-top:6px;font-size:13px}
+  .tickets th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;padding:0 10px 8px;border-bottom:1px solid var(--line)}
+  .tickets td{padding:10px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+  .tickets td:first-child,.tickets th:first-child{padding-left:0}
+  .tickets .prod{font-weight:600}
+  .tickets .note{color:var(--muted);font-size:11.5px}
+  .tblwrap{overflow-x:auto}
+
+  .simcard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:26px 28px;margin-top:8px}
+  .field label{display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;margin-bottom:6px}
+  .field label .val{font-family:var(--font-mono);color:var(--accent);font-weight:700}
+  .field input[type=range]{width:100%;accent-color:var(--accent)}
+  .field .sub{font-size:11px;color:var(--muted);margin-top:4px}
+  .simgrid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .simout{border-left:1px solid var(--line);padding-left:24px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+  .simout .out{display:flex;justify-content:space-between;align-items:baseline}
+  .simout .out .k{font-size:12px;color:var(--muted)}
+  .simout .out .v{font-family:var(--font-mono);font-size:16px;font-weight:600}
+  .simout .out.hero2 .v{font-size:22px;color:var(--accent)}
+
+  .kpi-note{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-size:12.5px;line-height:1.6;color:var(--muted)}
+  .kpi-note b{color:var(--ink);font-weight:600}
+
+  .ask{background:var(--hero-bg);color:var(--hero-text);border-radius:18px;padding:34px 32px;margin-top:8px}
+  .ask .eyebrow{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--hero-accent);margin-bottom:10px}
+  .ask h3{font-family:var(--font-head);font-weight:400;font-size:21px;margin:0 0 12px;color:var(--hero-text)}
+  .ask p{font-size:14px;line-height:1.65;color:var(--hero-muted);margin:0 0 6px}
+  .ask b{color:var(--hero-text);font-weight:600}
+
+  .footnote{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);line-height:1.6}
+
+  @media (max-width:760px){
+    .hero h1{font-size:33px}
+    .group{grid-template-columns:1fr}
+    .front{grid-template-columns:1fr}
+    .front-ticket{text-align:left}
+    .posrow{grid-template-columns:1fr}
+    .funnel{grid-template-columns:1fr 1fr}
+    .fstage:nth-child(3){border-left:0}
+    .phases{grid-template-columns:1fr}
+    .personas{grid-template-columns:1fr}
+    .scenarios{grid-template-columns:1fr}
+    .scen.reco{order:-1}
+    .simgrid{grid-template-columns:1fr}
+    .simout{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:18px}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 64 64" role="img" aria-label="Obliant">
+        <rect width="64" height="64" rx="16" fill="#12181F"/>
+        <path d="M18 33c0-10.1 6.8-18 16.3-18 7.7 0 13.7 4.4 15.7 11.2h-9.1c-1.5-2.7-3.8-4.1-6.8-4.1-4.8 0-8.2 4.4-8.2 10.9s3.4 10.9 8.2 10.9c3 0 5.3-1.4 6.8-4.1H50C48 46.6 42 51 34.3 51 24.8 51 18 43.1 18 33Z" fill="#BCD848"/>
+        <path d="M36.5 26.2h12.3v13.6H36.5c3-1.8 4.7-4 4.7-6.8s-1.7-5-4.7-6.8Z" fill="#FFFDF5"/>
+      </svg>
+      <div class="brand-text"><strong>Obliant</strong><span>Squad Omnichannel</span></div>
+    </div>
+    <div class="eyebrow">Proposta · Tráfego pago</div>
+    <h1>Um motor de demanda para PMGO e PMO, em duas fases controladas.</h1>
+    <p class="sub">Hoje a Omnichannel gera oportunidades por indicação e conteúdo orgânico. Esta proposta ativa um segundo canal — mídia paga — começando pelos dois produtos de maior ticket, com investimento e resultado dimensionados antes de qualquer real gasto.</p>
+    <div class="hero-ask">
+      <span class="k">Pedido de aprovação</span>
+      <span class="v">Escolher 1 dos 3 cenários · piloto de 60 dias</span>
+    </div>
+  </div>
+</div>
+
+<div class="doc">
+
+  <div class="section">
+    <h2>O que a frente vende</h2>
+    <p class="section-sub">Os seis produtos da Omnichannel, agrupados pelo papel que cumprem no Método Obliant — a mesma lógica de Diagnóstico, Direcionamento, Implementação e Acompanhamento que já estrutura nossa entrega.</p>
+
+    <div class="method">
+      <div class="method-step"><b>Diagnóstico</b><span>Leitura do contexto e dos riscos</span></div>
+      <div class="method-step is-focus"><b>Direcionamento</b><span>Escritório de Projetos · PMGO</span></div>
+      <div class="method-step is-focus"><b>Implementação</b><span>PMO Executivo · Implantação · Ágil</span></div>
+      <div class="method-step is-focus"><b>Acompanhamento</b><span>GMO</span></div>
+    </div>
+
+    <div class="groups">
+      <div class="group">
+        <div>
+          <span class="group-tag">Direcionamento</span>
+          <div class="group-role">Estrutura a governança antes de qualquer execução — define como as decisões de projeto serão tomadas e sustentadas.</div>
+        </div>
+        <div class="fronts">
+          <div class="front">
+            <div><div class="front-name">Escritório de Projetos</div><div class="front-desc">Framework de governança: papéis, ritos e priorização entre múltiplos projetos simultâneos.</div></div>
+            <div class="front-ticket">Sem faixa levantada<em>Fase 2</em></div>
+          </div>
+          <div class="front">
+            <div><div class="front-name">PMGO</div><div class="front-desc">Governança recorrente de portfólio de projetos, com acompanhamento contínuo pela Obliant.</div></div>
+            <div class="front-ticket">R$ 40–150 mil<em>Fase 1</em></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div>
+          <span class="group-tag">Implementação</span>
+          <div class="group-role">Executa — três variações do mesmo ofício, escolhidas pelo contexto e nível de autonomia do cliente.</div>
+        </div>
+        <div class="fronts">
+          <div class="front">
+            <div><div class="front-name">PMO Executivo</div><div class="front-desc">Visão consolidada de portfólio para a liderança: riscos, prazos e prioridades em um só painel.</div></div>
+            <div class="front-ticket">R$ 30–120 mil<em>Fase 1</em></div>
+          </div>
+          <div class="front">
+            <div><div class="front-name">PMO de Implantação</div><div class="front-desc">Condução ponta a ponta de implantações — ERP e projetos de transformação com prazo definido.</div></div>
+            <div class="front-ticket">R$ 30–120 mil<em>Fase 1</em></div>
+          </div>
+          <div class="front">
+            <div><div class="front-name">PMO Ágil</div><div class="front-desc">Governança para squads e portfólios que já operam em ciclos ágeis, sem travar a velocidade.</div></div>
+            <div class="front-ticket">R$ 30–120 mil<em>Fase 1</em></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div>
+          <span class="group-tag">Acompanhamento</span>
+          <div class="group-role">Sustenta o resultado depois da entrega. Também vende sozinho, fora de um projeto de PMGO/PMO: qualquer mudança de cultura, fusão ou reestruturação já é gatilho.</div>
+        </div>
+        <div class="fronts">
+          <div class="front">
+            <div><div class="front-name">GMO — Gestão da Mudança Organizacional</div><div class="front-desc">Adoção real da mudança pelas pessoas: comunicação, capacitação e reforço pós-entrega.</div></div>
+            <div class="front-ticket">R$ 20–80 mil<em>Fase 2</em></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>A mensagem que sustenta a campanha</h2>
+    <p class="section-sub">O posicionamento que a squad revisou — é dele que sai o texto dos anúncios, das landing pages e do conteúdo. Sem essa base consolidada, cada anúncio diria uma coisa diferente.</p>
+    <div class="posrow">
+      <div class="posq"><b>Quem somos, nesta frente</b><p>Conectamos governança, execução e sustentação para que projetos e mudanças organizacionais complexas realmente saiam do papel — não entregamos uma peça isolada.</p></div>
+      <div class="posq"><b>Para quem vendemos</b><p>Empresas em ciclo de implantação de ERP, expansão, fusão ou reorganização — com vários projetos simultâneos e sem uma governança formal que os sustente.</p></div>
+      <div class="posq"><b>Que problemas resolvemos</b><p>Atrasos e retrabalho por falta de priorização, ausência de PMO estruturado, decisões tomadas sem visão de risco, e mudanças que não se sustentam após a entrega.</p></div>
+      <div class="posq"><b>Nossos diferenciais</b><p>Visão integrada do ciclo completo, especialistas seniores, metodologia própria e flexibilidade — de um projeto pontual a uma governança recorrente.</p></div>
+    </div>
+    <div class="qualify">
+      <span class="qmark">&ldquo;</span>
+      <p>A pergunta que qualifica a oportunidade em qualquer conversa — e que orienta o texto dos anúncios: <b>quem controla cronograma, riscos e priorização hoje na empresa, existe um PMO estruturado, ou cada projeto corre por conta própria?</b></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Duas fases, seis produtos</h2>
+    <p class="section-sub">A frente Omnichannel tem seis produtos. Esta proposta ativa mídia paga só para os dois com ticket e demanda já mapeados — os outros dois entram depois de os primeiros provarem retorno.</p>
+    <div class="phases">
+      <div class="phase-card">
+        <div class="ptag">Fase 1</div>
+        <h3>PMGO &amp; PMO</h3>
+        <p>Ticket médio real, demanda validada, persona conhecida. É onde a verba entra primeiro.</p>
+        <ul>
+          <li>PMGO — governança recorrente</li>
+          <li>PMO — Executivo · Implantação · Ágil</li>
+        </ul>
+        <span class="phase-status now">Nesta proposta</span>
+      </div>
+      <div class="phase-card f2">
+        <div class="ptag">Fase 2</div>
+        <h3>Escritório de Projetos &amp; GMO</h3>
+        <p>Produtos independentes, com demanda própria — sem faixa comercial e persona ainda dimensionadas para mídia paga.</p>
+        <ul>
+          <li>Escritório de Projetos — sem faixa levantada</li>
+          <li>GMO — persona provável em RH/Pessoas</li>
+        </ul>
+        <span class="phase-status next">Depois do piloto</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Quem estamos tentando alcançar</h2>
+    <p class="section-sub">Duas pessoas decidem juntas, em canais diferentes — a campanha fala com as duas.</p>
+    <div class="personas">
+      <div class="persona">
+        <div class="role-tag">Comprador econômico</div>
+        <h3>Diretor(a) de Operações, TI ou Projetos</h3>
+        <p><b>Contexto:</b> empresa em implantação de ERP, expansão, fusão ou reorganização.</p>
+        <p><b>Gatilho:</b> atrasos, falta de governança visível, cobrança por previsibilidade.</p>
+        <p><b>Não pesquisa sozinho</b> — precisa ser alcançado por segmentação de cargo.</p>
+        <div class="channel">→ LinkedIn, segmentado por cargo</div>
+      </div>
+      <div class="persona">
+        <div class="role-tag">Influenciador técnico</div>
+        <h3>Head / Gerente de Projetos</h3>
+        <p><b>Contexto:</b> sobrecarga, falta de padrão entre projetos, sem uma solução formal ainda.</p>
+        <p><b>Gatilho:</b> pesquisa ativamente uma solução antes de levar o assunto pra diretoria.</p>
+        <p><b>Busca ativa</b> — digita o problema no Google antes de falar com fornecedor.</p>
+        <div class="channel">→ Google, busca ativa por termos técnicos</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Como vamos alcançar cada uma</h2>
+    <p class="section-sub">O mecanismo tem quatro estágios, e cada canal cumpre um papel diferente — o influenciador técnico busca ativamente, o comprador econômico precisa ser alcançado.</p>
+    <div class="funnel">
+      <div class="fstage"><div class="flabel">Topo</div><h4>LinkedIn Ads</h4><p>Segmentado por cargo, porte e setor. Alcança o comprador econômico, que não pesquisa sozinho. Conteúdo de autoridade + case.</p></div>
+      <div class="fstage"><div class="flabel">Meio</div><h4>Google Search</h4><p>Captura o influenciador técnico pesquisando ativamente ("PMO terceirizado", "consultoria implantação ERP"). Intenção alta, volume baixo.</p></div>
+      <div class="fstage"><div class="flabel">Meio</div><h4>Retargeting</h4><p>Quem visitou o site ou engajou no LinkedIn sem converter. Reforça a mensagem de posicionamento antes da oferta direta.</p></div>
+      <div class="fstage"><div class="flabel">Fundo</div><h4>Contato comercial</h4><p>Diagnóstico rápido — formulário curto ou reunião de 20 minutos, não uma proposta fechada no primeiro contato.</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Três cenários de investimento</h2>
+    <p class="section-sub">Com base no ticket médio combinado de PMGO e PMO (≈ R$86 mil) e em referências de mercado para custo por lead (R$250) e taxa de fechamento (15%) em B2B de ticket alto — ainda não medidas em campanha própria.</p>
+    <div class="scenarios">
+      <div class="scen">
+        <div class="scen-name">Conservador</div>
+        <div class="scen-meta">Ritmo de validação</div>
+        <div class="scen-main">R$ 1.700<small>por mês</small></div>
+        <div class="scen-rows">
+          <div class="scen-row"><span class="k">Leads/mês</span><span class="v">≈ 7</span></div>
+          <div class="scen-row"><span class="k">Clientes/mês</span><span class="v">1</span></div>
+          <div class="scen-row"><span class="k">Receita anual est.</span><span class="v">R$ 1,03 mi</span></div>
+          <div class="scen-row"><span class="k">CAC</span><span class="v">R$ 1.667 (2%)</span></div>
+        </div>
+      </div>
+      <div class="scen">
+        <div class="scen-name">Moderado</div>
+        <div class="scen-meta">Ritmo do piloto de 60 dias</div>
+        <div class="scen-main">R$ 3.300<small>por mês</small></div>
+        <div class="scen-rows">
+          <div class="scen-row"><span class="k">Leads/mês</span><span class="v">≈ 14</span></div>
+          <div class="scen-row"><span class="k">Clientes/mês</span><span class="v">2</span></div>
+          <div class="scen-row"><span class="k">Receita anual est.</span><span class="v">R$ 2,07 mi</span></div>
+          <div class="scen-row"><span class="k">CAC</span><span class="v">R$ 1.667 (2%)</span></div>
+        </div>
+      </div>
+      <div class="scen">
+        <div class="scen-name">Agressivo</div>
+        <div class="scen-meta">Ritmo de escala</div>
+        <div class="scen-main">R$ 6.700<small>por mês</small></div>
+        <div class="scen-rows">
+          <div class="scen-row"><span class="k">Leads/mês</span><span class="v">≈ 27</span></div>
+          <div class="scen-row"><span class="k">Clientes/mês</span><span class="v">4</span></div>
+          <div class="scen-row"><span class="k">Receita anual est.</span><span class="v">R$ 4,14 mi</span></div>
+          <div class="scen-row"><span class="k">CAC</span><span class="v">R$ 1.667 (2%)</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="roi-note">
+      <p><b>Leitura dos três cenários:</b> o retorno projetado é o mesmo nos três — cerca de 52x o investimento em mídia — porque o modelo escala de forma linear com as referências de mercado usadas. A diferença entre eles é o ritmo (quanto investir e quantos leads/clientes esperar por mês), não qual "compensa mais". A escolha depende de quanto ritmo a operação comercial consegue absorver agora.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Indicadores que vamos acompanhar</h2>
+    <p class="section-sub">A partir do primeiro dia de campanha, estes números substituem as referências de mercado acima por dado real.</p>
+    <div class="tblwrap">
+      <table class="tickets">
+        <thead><tr><th>Indicador</th><th>O que mede</th><th>Frequência</th></tr></thead>
+        <tbody>
+          <tr><td class="prod">Acessos à landing page</td><td class="note">Se o anúncio está trazendo volume, por produto</td><td class="note">Semanal</td></tr>
+          <tr><td class="prod">Taxa de conversão da LP</td><td class="note">Se quem chega na página vira lead</td><td class="note">Semanal</td></tr>
+          <tr><td class="prod">CPL real</td><td class="note">Custo por lead — vs. referência de R$250</td><td class="note">Semanal</td></tr>
+          <tr><td class="prod">Leads qualificados</td><td class="note">Se o volume bate a meta do cenário escolhido</td><td class="note">Mensal</td></tr>
+          <tr><td class="prod">Taxa de fechamento</td><td class="note">Lead → cliente — vs. referência de 15%</td><td class="note">Mensal</td></tr>
+          <tr><td class="prod">CAC real</td><td class="note">Custo por cliente fechado, por produto</td><td class="note">Mensal</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kpi-note"><b>Como ler:</b> acessos altos + conversão baixa aponta problema na página, não no anúncio. Acessos baixos aponta problema no alcance/segmentação do anúncio, não na página.</div>
+  </div>
+
+  <div class="section">
+    <h2>Simulador</h2>
+    <p class="section-sub">Para testar outros números além dos três cenários acima.</p>
+    <div class="simcard">
+      <div class="simgrid">
+        <div>
+          <div class="field">
+            <label>Meta de clientes / mês <span class="val" id="vMeta">2</span></label>
+            <input type="range" id="meta" min="1" max="8" step="1" value="2">
+          </div>
+          <div class="field">
+            <label>Ticket médio (R$) <span class="val" id="vTicket">R$ 86 mil</span></label>
+            <input type="range" id="ticket" min="30000" max="150000" step="1000" value="86000">
+          </div>
+          <div class="field">
+            <label>Taxa de fechamento <span class="val" id="vTaxa">15%</span></label>
+            <input type="range" id="taxa" min="5" max="35" step="1" value="15">
+          </div>
+          <div class="field">
+            <label>CPL <span class="val" id="vCpl">R$ 250</span></label>
+            <input type="range" id="cpl" min="80" max="600" step="10" value="250">
+          </div>
+        </div>
+        <div class="simout">
+          <div class="out hero2"><span class="k">Investimento / mês</span><span class="v" id="oBudget">—</span></div>
+          <div class="out"><span class="k">Leads / mês</span><span class="v" id="oLeads">—</span></div>
+          <div class="out"><span class="k">CAC</span><span class="v" id="oCac">—</span></div>
+          <div class="out"><span class="k">Receita anual estimada</span><span class="v" id="oReceita">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="ask">
+      <div class="eyebrow">Decisão solicitada</div>
+      <h3>Escolher um dos três cenários para um piloto de 60 dias.</h3>
+      <p>Ao final do piloto: comparamos CPL, taxa de fechamento e CAC reais com as referências de mercado usadas aqui, e decidimos juntas se escalamos, mantemos o ritmo, ou ajustamos antes de continuar.</p>
+      <p><b>Sem aprovação, sem gasto</b> — nenhum real entra em mídia antes desta decisão.</p>
+    </div>
+  </div>
+
+  <div class="footnote">
+    Fundação necessária antes do primeiro real em mídia: landing page por produto, rastreamento de conversão (GA4 + tags) e estrutura de campanha por produto no Google e no LinkedIn Ads. Elaborado pela squad Omnichannel a partir do posicionamento validado e do material comercial interno.
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var meta=document.getElementById('meta'), ticket=document.getElementById('ticket'), taxa=document.getElementById('taxa'), cpl=document.getElementById('cpl');
+  var vMeta=document.getElementById('vMeta'), vTicket=document.getElementById('vTicket'), vTaxa=document.getElementById('vTaxa'), vCpl=document.getElementById('vCpl');
+  var oBudget=document.getElementById('oBudget'), oLeads=document.getElementById('oLeads'), oCac=document.getElementById('oCac'), oReceita=document.getElementById('oReceita');
+  function brl(n){ return 'R$ ' + Math.round(n).toLocaleString('pt-BR'); }
+  function calc(){
+    var m=+meta.value, t=+ticket.value, tx=+taxa.value/100, c=+cpl.value;
+    vMeta.textContent=m; vTicket.textContent=brl(t); vTaxa.textContent=taxa.value+'%'; vCpl.textContent=brl(c);
+    var leads=m/tx, budget=leads*c, cac=budget/m, receitaAnual=m*12*t;
+    oLeads.textContent=Math.ceil(leads)+' /mês';
+    oBudget.textContent=brl(budget);
+    oCac.textContent=brl(cac)+' ('+((cac/t)*100).toFixed(1)+'%)';
+    oReceita.textContent=brl(receitaAnual);
+  }
+  [meta,ticket,taxa,cpl].forEach(function(el){ el.addEventListener('input',calc); });
+  calc();
+})();
+</script>
+</body>
+</html>
