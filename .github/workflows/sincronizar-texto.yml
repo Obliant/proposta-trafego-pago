@@ -1,0 +1,48 @@
+name: Sincronizar texto editado na página
+
+# Quem edita pelo botão da própria página grava no Supabase, não no arquivo.
+# Sem esta rotina, o arquivo e a página publicada divergem — e quem for mexer
+# no arquivo depois acaba sobrescrevendo a revisão de alguém sem perceber.
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # a cada 6 horas
+  workflow_dispatch:         # e sob demanda, pelo botão no GitHub
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sincronizar-texto
+  cancel-in-progress: false
+
+jobs:
+  sincronizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Instalar dependência
+        run: npm install jsdom@24 --no-save
+
+      - name: Incorporar edições ao index.html
+        run: node sincronizar.mjs
+
+      - name: Publicar se houve mudança
+        run: |
+          if git diff --quiet index.html; then
+            echo "Nada mudou — nenhum commit necessário."
+            exit 0
+          fi
+          git config user.name "Sincronizador de texto"
+          git config user.email "actions@github.com"
+          git add index.html
+          git commit -m "Incorporar texto editado pela página
+
+          Alterações feitas pelo botão de edição, trazidas do Supabase para o
+          arquivo, para que fonte e página publicada não divirjam."
+          git push
