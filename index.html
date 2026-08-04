@@ -102,6 +102,12 @@
   .persona p{margin:0 0 6px;font-size:12.5px;line-height:1.5;color:var(--muted)}
   .persona p b{color:var(--ink);font-weight:600}
   .persona .channel{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--accent);margin-top:8px}
+  .persona .fase{display:inline-block;font-family:var(--font-mono);font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px;margin-bottom:8px}
+  .persona .fase.f1{background:var(--accent-bright);color:#26300a}
+  .persona .fase.f2{background:var(--panel-2);border:1px solid var(--line);color:var(--muted)}
+  .persona .comotal{margin-top:12px;padding-top:11px;border-top:1px solid var(--line)}
+  .persona .comotal b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:5px}
+  .persona .comotal p{margin:0;font-size:12.5px;line-height:1.5}
 
   .scenarios{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
   .scen{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px 20px;position:relative}
@@ -359,24 +365,37 @@
 
   <div class="section">
     <h2>Quem estamos tentando alcançar</h2>
-    <p class="section-sub">Duas pessoas decidem juntas, em canais diferentes — a campanha fala com as duas.</p>
+    <p class="section-sub">Duas pessoas decidem juntas. <b>Nenhuma delas é exclusiva de um canal</b> — o que muda é a forma de alcançar cada uma, e em que fase isso acontece.</p>
     <div class="personas">
       <div class="persona">
+        <span class="fase f2">Alcance pleno na fase 2</span>
         <div class="role-tag">Comprador econômico</div>
         <h3>Diretor(a) de Operações, TI ou Projetos</h3>
         <p><b>Contexto:</b> empresa em implantação de ERP, expansão, fusão ou reorganização.</p>
         <p><b>Gatilho:</b> atrasos, falta de governança visível, cobrança por previsibilidade.</p>
-        <p><b>Não pesquisa sozinho</b> — precisa ser alcançado por segmentação de cargo.</p>
-        <div class="channel">→ LinkedIn, segmentado por cargo</div>
+        <p><b>Assina o contrato</b> — é quem aprova o investimento.</p>
+        <div class="comotal">
+          <b>Como chegamos até ele</b>
+          <p>Principalmente no LinkedIn, por segmentação de cargo — mas também no Google, se usarmos termos de <b>sintoma</b> ("por que meus projetos atrasam") em vez de termos técnicos.</p>
+        </div>
       </div>
       <div class="persona">
+        <span class="fase f1">Foco da fase 1</span>
         <div class="role-tag">Influenciador técnico</div>
         <h3>Head / Gerente de Projetos</h3>
         <p><b>Contexto:</b> sobrecarga, falta de padrão entre projetos, sem uma solução formal ainda.</p>
         <p><b>Gatilho:</b> pesquisa ativamente uma solução antes de levar o assunto pra diretoria.</p>
-        <p><b>Busca ativa</b> — digita o problema no Google antes de falar com fornecedor.</p>
-        <div class="channel">→ Google, busca ativa por termos técnicos</div>
+        <p><b>Não assina, mas abre a porta</b> — leva o assunto para quem decide.</p>
+        <div class="comotal">
+          <b>Como chegamos até ele</b>
+          <p>No Google, por termos técnicos ("PMO terceirizado", "escritório de projetos"). Também está no LinkedIn, mas lá o clique é caro demais para priorizá-lo.</p>
+        </div>
       </div>
+    </div>
+
+    <div class="roi-note">
+      <p><b>A diferença entre os canais não é a persona, é o método:</b> no LinkedIn você <b>escolhe a pessoa</b> — define cargo, setor e porte na configuração. No Google você <b>escolhe a pergunta</b>, e a pessoa vem junto. Por isso a lista de palavras-chave é o que determina quem aparece, mais do que a plataforma.</p>
+      <p><b>Consequência para a fase 1:</b> como começamos pelo Google com termos técnicos, a maior parte dos contatos virá do influenciador — quem sente o problema, mas não assina. Isso muda o que a oferta precisa entregar: material que o ajude a montar o caso interno vale mais do que uma proposta comercial. E acrescenta um passo entre o lead e o contrato, o que reforça por que não se deve esperar venda fechada dentro dos 90 dias.</p>
     </div>
   </div>
 
@@ -666,7 +685,7 @@ const SELETORES = [
   ".persona h3", ".persona p",
   ".fstage h4", ".fstage p",
   ".scen-name", ".scen-meta", ".scen-main", ".scen-row .v",
-  ".pc li", ".reco h3", ".reco p",
+  ".pc li", ".reco h3", ".reco p", ".persona .comotal p",
   ".mes .cab h3", ".mes .cab .per", ".mes li", ".entregaveis li",
   ".roi-note p", ".kpi-note", ".tickets td",
   ".ask h3", ".ask p", ".footnote"
