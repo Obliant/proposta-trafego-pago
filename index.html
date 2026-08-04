@@ -116,6 +116,38 @@
   .scen-row .k{color:var(--muted)}
   .scen-row .v{font-family:var(--font-mono);font-weight:600}
 
+  .pc{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:9px}
+  .pc .bloco > b{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+  .pc .pro > b{color:var(--accent)}
+  .pc .con > b{color:#a9702a}
+  .pc ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+  .pc li{font-size:12px;line-height:1.45;color:var(--muted);padding-left:13px;position:relative}
+  .pc li:before{content:"";position:absolute;left:0;top:6px;width:5px;height:5px;border-radius:50%}
+  .pc .pro li:before{background:var(--accent-bright)}
+  .pc .con li:before{background:#d9a960}
+
+  .reco{background:var(--panel);border:2px solid var(--accent);border-radius:16px;padding:22px 26px;margin-top:18px}
+  .reco .selo{display:inline-block;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--accent-bright);color:#26300a;padding:4px 11px;border-radius:999px;margin-bottom:12px}
+  .reco h3{font-family:var(--font-head);font-weight:400;font-size:19px;margin:0 0 10px}
+  .reco p{margin:0;font-size:14px;line-height:1.65}
+  .reco p + p{margin-top:10px}
+  .reco b{font-weight:600}
+
+  .linhatempo{display:flex;flex-direction:column;gap:14px}
+  .mes{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;display:grid;grid-template-columns:150px 1fr;gap:20px}
+  .mes .cab .qual{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent)}
+  .mes .cab h3{font-family:var(--font-head);font-weight:400;font-size:17px;margin:6px 0 4px}
+  .mes .cab .per{font-size:11.5px;color:var(--muted)}
+  .mes ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+  .mes li{font-size:13px;line-height:1.5;padding-left:17px;position:relative}
+  .mes li:before{content:"";position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;background:var(--accent-bright)}
+  .mes li b{font-weight:600}
+  .entregaveis{margin-top:16px;background:var(--panel-2);border-radius:12px;padding:18px 22px}
+  .entregaveis > b{display:block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:10px}
+  .entregaveis ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
+  .entregaveis li{font-size:13px;line-height:1.5;padding-left:17px;position:relative}
+  .entregaveis li:before{content:"\2713";position:absolute;left:0;top:0;color:var(--accent);font-weight:700;font-size:11px}
+
   .roi-note{margin-top:16px;background:var(--panel-2);border-left:3px solid var(--accent-bright);border-radius:0 10px 10px 0;padding:14px 18px}
   .roi-note p{margin:0;font-size:13px;line-height:1.6;color:var(--ink)}
   .roi-note b{font-weight:600}
@@ -178,6 +210,8 @@
     .phases{grid-template-columns:1fr}
     .personas{grid-template-columns:1fr}
     .scenarios{grid-template-columns:1fr}
+    .mes{grid-template-columns:1fr;gap:14px}
+    .entregaveis ul{grid-template-columns:1fr}
     .scen.reco{order:-1}
     .simgrid{grid-template-columns:1fr}
     .simout{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:18px}
@@ -209,7 +243,7 @@
     <p class="sub">Hoje a Omnichannel gera oportunidades por indicação e conteúdo orgânico. Esta proposta ativa um segundo canal — mídia paga — começando pelos dois produtos de maior ticket, com investimento e resultado dimensionados antes de qualquer real gasto.</p>
     <div class="hero-ask">
       <span class="k">Pedido de aprovação</span>
-      <span class="v">Escolher 1 dos 3 cenários · piloto de 60 dias</span>
+      <span class="v">Escolher 1 dos 3 cenários · piloto de 90 dias</span>
     </div>
   </div>
 </div>
@@ -371,16 +405,47 @@
           <div class="scen-row"><span class="k">Receita anual est.</span><span class="v">R$ 1,03 mi</span></div>
           <div class="scen-row"><span class="k">CAC</span><span class="v">R$ 1.667 (2%)</span></div>
         </div>
+        <div class="pc">
+          <div class="bloco pro"><b>A favor</b>
+            <ul>
+              <li>Menor comprometimento de caixa — R$ 5.100 nos 90 dias</li>
+              <li>Erro custa pouco se a oferta estiver errada</li>
+              <li>Suficiente para testar se a landing page converte</li>
+            </ul>
+          </div>
+          <div class="bloco con"><b>Contra</b>
+            <ul>
+              <li>Volume baixo demais para conclusão confiável em 90 dias</li>
+              <li>Inviabiliza o LinkedIn, que tem mínimo diário próprio</li>
+              <li>Pode terminar o piloto sem resposta clara</li>
+            </ul>
+          </div>
+        </div>
       </div>
       <div class="scen">
         <div class="scen-name">Moderado</div>
-        <div class="scen-meta">Ritmo do piloto de 60 dias</div>
+        <div class="scen-meta">Ritmo de aprendizado</div>
         <div class="scen-main">R$ 3.300<small>por mês</small></div>
         <div class="scen-rows">
           <div class="scen-row"><span class="k">Leads/mês</span><span class="v">≈ 14</span></div>
           <div class="scen-row"><span class="k">Clientes/mês</span><span class="v">2</span></div>
           <div class="scen-row"><span class="k">Receita anual est.</span><span class="v">R$ 2,07 mi</span></div>
           <div class="scen-row"><span class="k">CAC</span><span class="v">R$ 1.667 (2%)</span></div>
+        </div>
+        <div class="pc">
+          <div class="bloco pro"><b>A favor</b>
+            <ul>
+              <li>Volume suficiente para o Google gerar dado confiável</li>
+              <li>Permite testar várias palavras-chave e anúncios</li>
+              <li>Deixa folga para abrir o LinkedIn no 2º ou 3º mês</li>
+            </ul>
+          </div>
+          <div class="bloco con"><b>Contra</b>
+            <ul>
+              <li>Não cobre os dois canais com força ao mesmo tempo</li>
+              <li>Exige disciplina de resposta rápida do comercial</li>
+            </ul>
+          </div>
         </div>
       </div>
       <div class="scen">
@@ -393,10 +458,101 @@
           <div class="scen-row"><span class="k">Receita anual est.</span><span class="v">R$ 4,14 mi</span></div>
           <div class="scen-row"><span class="k">CAC</span><span class="v">R$ 1.667 (2%)</span></div>
         </div>
+        <div class="pc">
+          <div class="bloco pro"><b>A favor</b>
+            <ul>
+              <li>Google e LinkedIn rodando em paralelo desde o início</li>
+              <li>Aprendizado mais rápido, com mais dado por semana</li>
+              <li>Testa se a operação comercial absorve volume</li>
+            </ul>
+          </div>
+          <div class="bloco con"><b>Contra</b>
+            <ul>
+              <li>Aposta antes de saber se a página converte</li>
+              <li>Pode gerar mais leads do que o time consegue atender bem</li>
+              <li>R$ 20.100 comprometidos nos 90 dias</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
+
     <div class="roi-note">
-      <p><b>Leitura dos três cenários:</b> o retorno projetado é o mesmo nos três — cerca de 52x o investimento em mídia — porque o modelo escala de forma linear com as referências de mercado usadas. A diferença entre eles é o ritmo (quanto investir e quantos leads/clientes esperar por mês), não qual "compensa mais". A escolha depende de quanto ritmo a operação comercial consegue absorver agora.</p>
+      <p><b>Por que o retorno projetado é igual nos três:</b> cerca de 52 vezes o investimento em mídia, porque o modelo escala de forma linear com as referências usadas. A diferença entre os cenários não é qual compensa mais — é <b>quanto ritmo a operação comercial consegue absorver</b> e quanto risco se aceita antes de ter dado próprio.</p>
+    </div>
+
+    <div class="reco">
+      <span class="selo">Recomendação da squad</span>
+      <h3>Começar pelo cenário Moderado, com R$ 3.300 por mês.</h3>
+      <p>O <b>Conservador</b> tem um problema prático: com R$ 1.700 o LinkedIn fica inviável pelo mínimo diário da plataforma, e o volume de busca de termos como "PMO terceirizado" no Brasil é pequeno — há chance real de o piloto terminar sem dado suficiente para decidir qualquer coisa. Economizar aqui pode custar mais um trimestre de indefinição.</p>
+      <p>O <b>Agressivo</b> compromete R$ 20 mil antes de sabermos se a landing page converte. E gera um risco menos óbvio: mais leads do que o time consegue responder bem. Lead mal atendido é pior que lead não gerado, porque queima a marca com exatamente o público que queremos.</p>
+      <p>O <b>Moderado</b> gera volume suficiente para o Google produzir dado confiável, mantém o comprometimento em R$ 9.900 nos 90 dias — menos de um terço de um único contrato de PMO — e deixa margem para abrir o LinkedIn no segundo mês, quando já soubermos se a página converte.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>O que será entregue nos 90 dias</h2>
+    <p class="section-sub">O piloto tem três meses porque cada um cumpre uma função diferente — lançar, corrigir e escalar. Cortar para dois elimina justamente o mês em que se amplia o que deu certo.</p>
+
+    <div class="linhatempo">
+      <div class="mes">
+        <div class="cab">
+          <div class="qual">Mês 1</div>
+          <h3>Lançamento</h3>
+          <div class="per">Dias 1 a 30</div>
+        </div>
+        <ul>
+          <li><b>Campanhas no ar</b> no Google, separadas por produto (PMGO e PMO)</li>
+          <li><b>Primeiras duas semanas sem alteração</b> — as plataformas passam por fase de aprendizado, e cada mexida reinicia esse período</li>
+          <li><b>Primeiros dados de custo por lead</b>, ainda instáveis</li>
+          <li><b>Relatório semanal</b> de acessos, conversão da página e gasto</li>
+        </ul>
+      </div>
+
+      <div class="mes">
+        <div class="cab">
+          <div class="qual">Mês 2</div>
+          <h3>Otimização</h3>
+          <div class="per">Dias 31 a 60</div>
+        </div>
+        <ul>
+          <li><b>Palavras negativas aplicadas</b> a partir dos termos reais de busca</li>
+          <li><b>Anúncios e landing page ajustados</b> com base no que converteu</li>
+          <li><b>LinkedIn ativado</b>, se a página tiver provado que converte</li>
+          <li><b>Custo por lead real consolidado</b>, substituindo a estimativa de mercado</li>
+        </ul>
+      </div>
+
+      <div class="mes">
+        <div class="cab">
+          <div class="qual">Mês 3</div>
+          <h3>Escala e avaliação</h3>
+          <div class="per">Dias 61 a 90</div>
+        </div>
+        <ul>
+          <li><b>Ampliação do que performou</b> — mais verba no canal e produto que trouxe lead melhor</li>
+          <li><b>Avaliação da qualidade</b> dos leads junto ao comercial, não só do volume</li>
+          <li><b>Relatório final</b> com os números próprios da Obliant</li>
+          <li><b>Recomendação de continuidade</b>, com o investimento recalculado</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="entregaveis">
+      <b>Entregáveis concretos ao fim do piloto</b>
+      <ul>
+        <li>Landing pages por produto, que permanecem úteis mesmo sem campanha</li>
+        <li>Rastreamento instalado e funcionando no site</li>
+        <li>Contas de anúncio estruturadas e reutilizáveis</li>
+        <li>Base de leads qualificados gerada no período</li>
+        <li>Custo por lead e taxa de qualificação reais</li>
+        <li>Relatório final com recomendação de continuidade</li>
+      </ul>
+    </div>
+
+    <div class="roi-note" style="margin-top:18px">
+      <p><b>Uma expectativa que precisa ficar clara desde já:</b> o piloto valida <b>geração e qualificação de leads</b> — provavelmente não contratos assinados. Venda consultiva de R$ 40 a 150 mil costuma levar mais de três meses entre o primeiro contato e a assinatura. Um lead gerado no mês 2 ainda estará em negociação quando o piloto terminar.</p>
+      <p>Por isso a avaliação final deve olhar <b>oportunidades reais criadas no pipeline</b>, e não receita fechada. Cobrar contrato assinado em 90 dias faria o piloto parecer fracasso mesmo tendo funcionado.</p>
     </div>
   </div>
 
@@ -455,8 +611,8 @@
   <div class="section">
     <div class="ask">
       <div class="eyebrow">Decisão solicitada</div>
-      <h3>Escolher um dos três cenários para um piloto de 60 dias.</h3>
-      <p>Ao final do piloto: comparamos CPL, taxa de fechamento e CAC reais com as referências de mercado usadas aqui, e decidimos juntas se escalamos, mantemos o ritmo, ou ajustamos antes de continuar.</p>
+      <h3>Escolher um dos três cenários para um piloto de 90 dias.</h3>
+      <p>A squad recomenda o cenário Moderado, R$ 3.300 por mês — R$ 9.900 no período. Ao final, comparamos custo por lead, taxa de qualificação e CAC reais com as referências de mercado usadas aqui, e decidimos juntas se escalamos, mantemos o ritmo, ou ajustamos antes de continuar.</p>
       <p><b>Sem aprovação, sem gasto</b> — nenhum real entra em mídia antes desta decisão.</p>
     </div>
   </div>
@@ -507,6 +663,8 @@ const SELETORES = [
   ".persona h3", ".persona p",
   ".fstage h4", ".fstage p",
   ".scen-name", ".scen-meta", ".scen-main", ".scen-row .v",
+  ".pc li", ".reco h3", ".reco p",
+  ".mes .cab h3", ".mes .cab .per", ".mes li", ".entregaveis li",
   ".roi-note p", ".kpi-note", ".tickets td",
   ".ask h3", ".ask p", ".footnote"
 ];
