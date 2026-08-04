@@ -106,7 +106,9 @@
   .persona .fase.f1{background:var(--accent-bright);color:#26300a}
   .persona .fase.f2{background:var(--panel-2);border:1px solid var(--line);color:var(--muted)}
   .persona .comotal{margin-top:12px;padding-top:11px;border-top:1px solid var(--line)}
-  .persona .comotal b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:5px}
+  /* Filho direto apenas: senao o negrito dentro do paragrafo vira rotulo. */
+  .persona .comotal > b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:5px}
+  .persona .comotal p b{font-weight:600}
   .persona .comotal p{margin:0;font-size:12.5px;line-height:1.5}
 
   .scenarios{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
@@ -368,18 +370,6 @@
     <p class="section-sub">Duas pessoas decidem juntas. <b>Nenhuma delas é exclusiva de um canal</b> — o que muda é a forma de alcançar cada uma, e em que fase isso acontece.</p>
     <div class="personas">
       <div class="persona">
-        <span class="fase f2">Alcance pleno na fase 2</span>
-        <div class="role-tag">Comprador econômico</div>
-        <h3>Diretor(a) de Operações, TI ou Projetos</h3>
-        <p><b>Contexto:</b> empresa em implantação de ERP, expansão, fusão ou reorganização.</p>
-        <p><b>Gatilho:</b> atrasos, falta de governança visível, cobrança por previsibilidade.</p>
-        <p><b>Assina o contrato</b> — é quem aprova o investimento.</p>
-        <div class="comotal">
-          <b>Como chegamos até ele</b>
-          <p>Principalmente no LinkedIn, por segmentação de cargo — mas também no Google, se usarmos termos de <b>sintoma</b> ("por que meus projetos atrasam") em vez de termos técnicos.</p>
-        </div>
-      </div>
-      <div class="persona">
         <span class="fase f1">Foco da fase 1</span>
         <div class="role-tag">Influenciador técnico</div>
         <h3>Head / Gerente de Projetos</h3>
@@ -389,6 +379,18 @@
         <div class="comotal">
           <b>Como chegamos até ele</b>
           <p>No Google, por termos técnicos ("PMO terceirizado", "escritório de projetos"). Também está no LinkedIn, mas lá o clique é caro demais para priorizá-lo.</p>
+        </div>
+      </div>
+      <div class="persona">
+        <span class="fase f2">Alcance pleno na fase 2</span>
+        <div class="role-tag">Comprador econômico</div>
+        <h3>Diretor(a) de Operações, TI ou Projetos</h3>
+        <p><b>Contexto:</b> empresa em implantação de ERP, expansão, fusão ou reorganização.</p>
+        <p><b>Gatilho:</b> atrasos, falta de governança visível, cobrança por previsibilidade.</p>
+        <p><b>Assina o contrato</b> — é quem aprova o investimento.</p>
+        <div class="comotal">
+          <b>Como chegamos até ele</b>
+          <p>Principalmente no LinkedIn, por segmentação de cargo — mas também no Google, se usarmos termos de <b>sintoma</b> ("por que meus projetos atrasam") em vez de termos técnicos.</p>
         </div>
       </div>
     </div>
