@@ -143,7 +143,9 @@
 
   .linhatempo{display:flex;flex-direction:column;gap:14px}
   .mes{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;display:grid;grid-template-columns:150px 1fr;gap:20px}
+  .mes.zero{background:var(--panel-2);border-style:dashed}
   .mes .cab .qual{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent)}
+  .mes .cab .selo0{display:inline-block;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:3px 8px;border-radius:999px;margin-top:8px}
   .mes .cab h3{font-family:var(--font-head);font-weight:400;font-size:17px;margin:6px 0 4px}
   .mes .cab .per{font-size:11.5px;color:var(--muted)}
   .mes ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
@@ -516,9 +518,25 @@
 
   <div class="section">
     <h2>O que será entregue nos 90 dias</h2>
-    <p class="section-sub">O piloto tem três meses porque cada um cumpre uma função diferente — lançar, corrigir e escalar. Cortar para dois elimina justamente o mês em que se amplia o que deu certo.</p>
+    <p class="section-sub">O piloto tem três meses porque cada um cumpre uma função diferente — lançar, corrigir e escalar. Cortar para dois elimina justamente o mês em que se amplia o que deu certo. Antes deles há o <b>Mês 0</b>, de preparação, que já está em andamento.</p>
 
     <div class="linhatempo">
+      <div class="mes zero">
+        <div class="cab">
+          <div class="qual">Mês 0</div>
+          <h3>Fundação</h3>
+          <div class="per">Já em andamento</div>
+          <span class="selo0">Não depende desta aprovação</span>
+        </div>
+        <ul>
+          <li><b>Landing pages por produto</b> — PMGO e PMO, com formulário e página de agradecimento</li>
+          <li><b>Rastreamento instalado e testado</b> — GA4 e tags de conversão</li>
+          <li><b>Contas criadas</b> no Google Ads e no LinkedIn — criar conta é gratuito, cobra-se só quando a campanha é ativada</li>
+          <li><b>Públicos, palavras-chave e criativos</b> montados e salvos como rascunho</li>
+          <li><b>Destino do lead definido</b> — onde cai, quem responde e em quanto tempo</li>
+        </ul>
+      </div>
+
       <div class="mes">
         <div class="cab">
           <div class="qual">Mês 1</div>
@@ -560,6 +578,11 @@
           <li><b>Recomendação de continuidade</b>, com o investimento recalculado</li>
         </ul>
       </div>
+    </div>
+
+    <div class="roi-note" style="margin-top:16px">
+      <p><b>Por que o Mês 0 já está andando:</b> nada dele consome verba de mídia — são horas da squad. E tem valor mesmo que esta proposta seja adiada, porque uma landing page dedicada por produto melhora a conversão do tráfego orgânico que já existe hoje.</p>
+      <p><b>Mas a fundação sozinha não gera lead.</b> Página sem tráfego é uma página que ninguém visita. O que o investimento compra não é a estrutura — é o público chegando até ela. É essa a decisão em aberto.</p>
     </div>
 
     <div class="entregaveis">
