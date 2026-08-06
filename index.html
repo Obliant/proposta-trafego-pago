@@ -124,6 +124,25 @@
   .scen-row .k{color:var(--muted)}
   .scen-row .v{font-family:var(--font-mono);font-weight:600}
 
+  .leilao{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+  .efeito{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .efeito .n{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+  .efeito h3{font-family:var(--font-head);font-weight:400;font-size:16px;margin:0 0 8px}
+  .efeito p{margin:0;font-size:12.5px;line-height:1.55;color:var(--muted)}
+  .efeito p b{color:var(--ink);font-weight:600}
+
+  .comparacao{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:16px}
+  .comparacao th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;padding:0 12px 8px;border-bottom:1px solid var(--line)}
+  .comparacao th:not(:first-child),.comparacao td:not(:first-child){text-align:center}
+  .comparacao td{padding:11px 12px;border-bottom:1px solid var(--line);line-height:1.5}
+  .comparacao td:first-child,.comparacao th:first-child{padding-left:0;text-align:left}
+  .comparacao .rot{color:var(--muted);font-size:12.5px}
+  .comparacao .num{font-family:var(--font-mono);font-weight:600}
+  .comparacao .destaque{color:var(--accent)}
+  .comparacao tr.risco td{color:#a9702a}
+
+  @media (max-width:760px){ .leilao{grid-template-columns:1fr} }
+
   .pc{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:9px}
   .pc .bloco > b{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
   .pc .pro > b{color:var(--accent)}
@@ -414,6 +433,55 @@
     </div>
     <div class="roi-note">
       <p><b>Por que o Google vem antes, se o LinkedIn é topo de funil:</b> em consciência do problema, o LinkedIn realmente vem primeiro — ele fala com quem ainda nem sabe que precisa. Mas <b>ordem de consciência e ordem de investimento são coisas diferentes.</b> Começar pelo Google testa a landing page com o público mais fácil de converter e o clique mais barato. Se ela não converter com quem já está procurando, não converteria com tráfego frio — e descobrir isso pelo Google custa uma fração do preço.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Como o dinheiro vira lead</h2>
+    <p class="section-sub">Antes dos números: mídia paga não funciona como compra de espaço. Entender o mecanismo muda a leitura dos cenários.</p>
+
+    <div class="callout">
+      <p><b>Não se compra posição, disputa-se cada busca.</b> Quando alguém pesquisa "consultoria implantação ERP", acontece um leilão instantâneo entre os anunciantes interessados naquela busca. Quem ganha não é quem paga mais: as plataformas multiplicam o lance por uma nota de relevância — anúncio coerente com a busca, e página coerente com o anúncio.</p>
+      <p>Por isso o que se aprova aqui é <b>quanto se aceita gastar por dia</b>, não quantas pessoas serão alcançadas. O custo de cada clique é definido pela concorrência daquele momento, não por nós.</p>
+    </div>
+
+    <h3 style="font-family:var(--font-head);font-weight:400;font-size:18px;margin:32px 0 4px">E se investirmos menos?</h3>
+    <p class="section-sub">A resposta intuitiva seria "proporcionalmente menos leads". Não é isso que acontece — abaixo de certo ponto, o resultado cai mais rápido que a verba, por três motivos.</p>
+
+    <div class="leilao">
+      <div class="efeito">
+        <div class="n">Efeito 1</div>
+        <h3>Piso de operação</h3>
+        <p>O LinkedIn exige um mínimo diário por campanha — abaixo dele, simplesmente não roda. E no Google, orçamento pequeno faz você participar de <b>uma fração das buscas do dia</b>: o anúncio some depois que a verba acaba, geralmente antes do horário comercial terminar.</p>
+      </div>
+      <div class="efeito">
+        <div class="n">Efeito 2</div>
+        <h3>Aprendizado travado</h3>
+        <p>As plataformas otimizam sozinhas a partir das conversões que registram. Com <b>poucos dados, elas não aprendem</b> — a campanha gasta sem melhorar. É o efeito menos visível e o mais caro: você paga o preço de aprendiz sem receber o aprendizado.</p>
+      </div>
+      <div class="efeito">
+        <div class="n">Efeito 3</div>
+        <h3>Amostra pequena demais</h3>
+        <p>Com 7 leads no mês, um único caso atípico distorce o resultado. Não dá para dizer se o custo por lead foi bom ou se deu sorte. <b>O piloto termina sem resposta</b> — e a decisão seguinte continua no escuro.</p>
+      </div>
+    </div>
+
+    <div class="tblwrap">
+      <table class="comparacao">
+        <thead><tr><th>Com a mesma taxa de fechamento</th><th>Conservador</th><th>Moderado</th><th>Agressivo</th></tr></thead>
+        <tbody>
+          <tr><td class="rot">Investimento mensal</td><td class="num">R$ 1.700</td><td class="num destaque">R$ 3.300</td><td class="num">R$ 6.700</td></tr>
+          <tr><td class="rot">Leads por mês</td><td class="num">≈ 7</td><td class="num destaque">≈ 14</td><td class="num">≈ 27</td></tr>
+          <tr><td class="rot">Leads em setembro — os únicos que ainda dão tempo de fechar até novembro</td><td class="num">7</td><td class="num destaque">14</td><td class="num">27</td></tr>
+          <tr class="risco"><td class="rot">Chance de terminar o piloto sem conclusão confiável</td><td class="num">alta</td><td class="num">baixa</td><td class="num">baixa</td></tr>
+          <tr><td class="rot">Canais que dá para testar</td><td class="num">só Google</td><td class="num destaque">Google, e LinkedIn no 2º mês</td><td class="num">os dois desde o início</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="roi-note">
+      <p><b>O que não muda quando se investe menos:</b> o custo por lead. Ele é definido pelo leilão, não pelo nosso orçamento — pagar menos por mês não faz cada clique ficar mais barato.</p>
+      <p><b>O que muda:</b> quantos leads por mês, quanto se aprende, e a probabilidade de sair uma conversão dentro do prazo. Com 7 leads e taxa média de 15%, o esperado é <b>um</b> cliente — mas com amostra desse tamanho, sair zero é perfeitamente possível. Não por a estratégia estar errada, e sim porque números pequenos são dominados pelo acaso.</p>
     </div>
   </div>
 
@@ -716,6 +784,7 @@ const SELETORES = [
   ".fstage h4", ".fstage p",
   ".scen-name", ".scen-meta", ".scen-main", ".scen-row .v",
   ".pc li", ".reco h3", ".reco p", ".persona .comotal p",
+  ".efeito h3", ".efeito p", ".comparacao td",
   ".mes .cab h3", ".mes .cab .per", ".mes li", ".entregaveis li",
   ".roi-note p", ".kpi-note", ".tickets td",
   ".ask h3", ".ask p", ".footnote"
